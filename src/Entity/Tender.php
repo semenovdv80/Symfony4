@@ -203,5 +203,322 @@ class Tender
      */
     private $updatedAt;
 
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getUserId(): ?int
+    {
+        return $this->userId;
+    }
+
+    public function setUserId(int $userId): self
+    {
+        $this->userId = $userId;
+
+        return $this;
+    }
+
+    public function getTypeId(): ?int
+    {
+        return $this->typeId;
+    }
+
+    public function setTypeId(int $typeId): self
+    {
+        $this->typeId = $typeId;
+
+        return $this;
+    }
+
+    public function getMethodId(): ?int
+    {
+        return $this->methodId;
+    }
+
+    public function setMethodId(int $methodId): self
+    {
+        $this->methodId = $methodId;
+
+        return $this;
+    }
+
+    public function getNameRu(): ?string
+    {
+        return $this->nameRu;
+    }
+
+    public function setNameRu(string $nameRu): self
+    {
+        $this->nameRu = $nameRu;
+
+        return $this;
+    }
+
+    public function getFullDescription(): ?string
+    {
+        return $this->fullDescription;
+    }
+
+    public function setFullDescription(string $fullDescription): self
+    {
+        $this->fullDescription = $fullDescription;
+
+        return $this;
+    }
+
+    public function getCustomer(): ?string
+    {
+        return $this->customer;
+    }
+
+    public function setCustomer(string $customer): self
+    {
+        $this->customer = $customer;
+
+        return $this;
+    }
+
+    public function getBinInn(): ?string
+    {
+        return $this->binInn;
+    }
+
+    public function setBinInn(string $binInn): self
+    {
+        $this->binInn = $binInn;
+
+        return $this;
+    }
+
+    public function getRnn(): ?string
+    {
+        return $this->rnn;
+    }
+
+    public function setRnn(string $rnn): self
+    {
+        $this->rnn = $rnn;
+
+        return $this;
+    }
+
+    public function getOrganizer(): ?string
+    {
+        return $this->organizer;
+    }
+
+    public function setOrganizer(string $organizer): self
+    {
+        $this->organizer = $organizer;
+
+        return $this;
+    }
+
+    public function getAmount()
+    {
+        return $this->amount;
+    }
+
+    public function setAmount($amount): self
+    {
+        $this->amount = $amount;
+
+        return $this;
+    }
+
+    public function getLocation(): ?string
+    {
+        return $this->location;
+    }
+
+    public function setLocation(string $location): self
+    {
+        $this->location = $location;
+
+        return $this;
+    }
+
+    public function getKatoId(): ?int
+    {
+        return $this->katoId;
+    }
+
+    public function setKatoId(?int $katoId): self
+    {
+        $this->katoId = $katoId;
+
+        return $this;
+    }
+
+    public function getOpenDate(): ?\DateTimeInterface
+    {
+        return $this->openDate;
+    }
+
+    public function setOpenDate(?\DateTimeInterface $openDate): self
+    {
+        $this->openDate = $openDate;
+
+        return $this;
+    }
+
+    public function getCloseDate(): ?\DateTimeInterface
+    {
+        return $this->closeDate;
+    }
+
+    public function setCloseDate(?\DateTimeInterface $closeDate): self
+    {
+        $this->closeDate = $closeDate;
+
+        return $this;
+    }
+
+    public function getAppPlaceGet(): ?string
+    {
+        return $this->appPlaceGet;
+    }
+
+    public function setAppPlaceGet(?string $appPlaceGet): self
+    {
+        $this->appPlaceGet = $appPlaceGet;
+
+        return $this;
+    }
+
+    public function getAppOpenDate(): ?\DateTimeInterface
+    {
+        return $this->appOpenDate;
+    }
+
+    public function setAppOpenDate(?\DateTimeInterface $appOpenDate): self
+    {
+        $this->appOpenDate = $appOpenDate;
+
+        return $this;
+    }
+
+    public function getAppPlaceOpen(): ?string
+    {
+        return $this->appPlaceOpen;
+    }
+
+    public function setAppPlaceOpen(?string $appPlaceOpen): self
+    {
+        $this->appPlaceOpen = $appPlaceOpen;
+
+        return $this;
+    }
+
+    public function getAgent(): ?string
+    {
+        return $this->agent;
+    }
+
+    public function setAgent(string $agent): self
+    {
+        $this->agent = $agent;
+
+        return $this;
+    }
+
+    public function getLink(): ?string
+    {
+        return $this->link;
+    }
+
+    public function setLink(string $link): self
+    {
+        $this->link = $link;
+
+        return $this;
+    }
+
+    public function getActivity(): ?\DateTimeInterface
+    {
+        return $this->activity;
+    }
+
+    public function setActivity(?\DateTimeInterface $activity): self
+    {
+        $this->activity = $activity;
+
+        return $this;
+    }
+
+    public function getGzid(): ?string
+    {
+        return $this->gzid;
+    }
+
+    public function setGzid(?string $gzid): self
+    {
+        $this->gzid = $gzid;
+
+        return $this;
+    }
+
+    public function getFileCdocs(): ?string
+    {
+        return $this->fileCdocs;
+    }
+
+    public function setFileCdocs(?string $fileCdocs): self
+    {
+        $this->fileCdocs = $fileCdocs;
+
+        return $this;
+    }
+
+    public function getFileItogs(): ?string
+    {
+        return $this->fileItogs;
+    }
+
+    public function setFileItogs(?string $fileItogs): self
+    {
+        $this->fileItogs = $fileItogs;
+
+        return $this;
+    }
+
+    public function getPublished(): ?bool
+    {
+        return $this->published;
+    }
+
+    public function setPublished(bool $published): self
+    {
+        $this->published = $published;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(?\DateTimeInterface $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(?\DateTimeInterface $updatedAt): self
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
 
 }
