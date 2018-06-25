@@ -1,0 +1,85 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tender index{% endblock %}
+
+{% block body %}
+    <h1>Tender index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>UserId</th>
+                <th>TypeId</th>
+                <th>MethodId</th>
+                <th>NameRu</th>
+                <th>FullDescription</th>
+                <th>Customer</th>
+                <th>BinInn</th>
+                <th>Rnn</th>
+                <th>Organizer</th>
+                <th>Amount</th>
+                <th>Location</th>
+                <th>KatoId</th>
+                <th>OpenDate</th>
+                <th>CloseDate</th>
+                <th>AppPlaceGet</th>
+                <th>AppOpenDate</th>
+                <th>AppPlaceOpen</th>
+                <th>Agent</th>
+                <th>Link</th>
+                <th>Activity</th>
+                <th>Gzid</th>
+                <th>FileCdocs</th>
+                <th>FileItogs</th>
+                <th>Published</th>
+                <th>CreatedAt</th>
+                <th>UpdatedAt</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for tender in tenders %}
+            <tr>
+                <td>{{ tender.id }}</td>
+                <td>{{ tender.userId }}</td>
+                <td>{{ tender.typeId }}</td>
+                <td>{{ tender.methodId }}</td>
+                <td>{{ tender.nameRu }}</td>
+                <td>{{ tender.fullDescription }}</td>
+                <td>{{ tender.customer }}</td>
+                <td>{{ tender.binInn }}</td>
+                <td>{{ tender.rnn }}</td>
+                <td>{{ tender.organizer }}</td>
+                <td>{{ tender.amount }}</td>
+                <td>{{ tender.location }}</td>
+                <td>{{ tender.katoId }}</td>
+                <td>{{ tender.openDate ? tender.openDate|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ tender.closeDate ? tender.closeDate|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ tender.appPlaceGet }}</td>
+                <td>{{ tender.appOpenDate ? tender.appOpenDate|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ tender.appPlaceOpen }}</td>
+                <td>{{ tender.agent }}</td>
+                <td>{{ tender.link }}</td>
+                <td>{{ tender.activity ? tender.activity|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ tender.gzid }}</td>
+                <td>{{ tender.fileCdocs }}</td>
+                <td>{{ tender.fileItogs }}</td>
+                <td>{{ tender.published ? 'Yes' : 'No' }}</td>
+                <td>{{ tender.createdAt ? tender.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ tender.updatedAt ? tender.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('tender_show', {'id': tender.id}) }}">show</a>
+                    <a href="{{ path('tender_edit', {'id': tender.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="28">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('tender_new') }}">Create new</a>
+{% endblock %}

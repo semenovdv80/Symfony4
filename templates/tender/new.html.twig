@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Tender{% endblock %}
+
+{% block body %}
+    <h1>Create new Tender</h1>
+
+    {{ include('tender/_form.html.twig') }}
+
+    <a href="{{ path('tender_index') }}">back to list</a>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Tender{% endblock %}
+
+{% block body %}
+    <h1>Edit Tender</h1>
+
+    {{ include('tender/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('tender_index') }}">back to list</a>
+
+    {{ include('tender/_delete_form.html.twig') }}
+{% endblock %}

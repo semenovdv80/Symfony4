@@ -1,0 +1,126 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tender{% endblock %}
+
+{% block body %}
+    <h1>Tender</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ tender.id }}</td>
+            </tr>
+            <tr>
+                <th>UserId</th>
+                <td>{{ tender.userId }}</td>
+            </tr>
+            <tr>
+                <th>TypeId</th>
+                <td>{{ tender.typeId }}</td>
+            </tr>
+            <tr>
+                <th>MethodId</th>
+                <td>{{ tender.methodId }}</td>
+            </tr>
+            <tr>
+                <th>NameRu</th>
+                <td>{{ tender.nameRu }}</td>
+            </tr>
+            <tr>
+                <th>FullDescription</th>
+                <td>{{ tender.fullDescription }}</td>
+            </tr>
+            <tr>
+                <th>Customer</th>
+                <td>{{ tender.customer }}</td>
+            </tr>
+            <tr>
+                <th>BinInn</th>
+                <td>{{ tender.binInn }}</td>
+            </tr>
+            <tr>
+                <th>Rnn</th>
+                <td>{{ tender.rnn }}</td>
+            </tr>
+            <tr>
+                <th>Organizer</th>
+                <td>{{ tender.organizer }}</td>
+            </tr>
+            <tr>
+                <th>Amount</th>
+                <td>{{ tender.amount }}</td>
+            </tr>
+            <tr>
+                <th>Location</th>
+                <td>{{ tender.location }}</td>
+            </tr>
+            <tr>
+                <th>KatoId</th>
+                <td>{{ tender.katoId }}</td>
+            </tr>
+            <tr>
+                <th>OpenDate</th>
+                <td>{{ tender.openDate ? tender.openDate|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>CloseDate</th>
+                <td>{{ tender.closeDate ? tender.closeDate|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>AppPlaceGet</th>
+                <td>{{ tender.appPlaceGet }}</td>
+            </tr>
+            <tr>
+                <th>AppOpenDate</th>
+                <td>{{ tender.appOpenDate ? tender.appOpenDate|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>AppPlaceOpen</th>
+                <td>{{ tender.appPlaceOpen }}</td>
+            </tr>
+            <tr>
+                <th>Agent</th>
+                <td>{{ tender.agent }}</td>
+            </tr>
+            <tr>
+                <th>Link</th>
+                <td>{{ tender.link }}</td>
+            </tr>
+            <tr>
+                <th>Activity</th>
+                <td>{{ tender.activity ? tender.activity|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Gzid</th>
+                <td>{{ tender.gzid }}</td>
+            </tr>
+            <tr>
+                <th>FileCdocs</th>
+                <td>{{ tender.fileCdocs }}</td>
+            </tr>
+            <tr>
+                <th>FileItogs</th>
+                <td>{{ tender.fileItogs }}</td>
+            </tr>
+            <tr>
+                <th>Published</th>
+                <td>{{ tender.published ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>CreatedAt</th>
+                <td>{{ tender.createdAt ? tender.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>UpdatedAt</th>
+                <td>{{ tender.updatedAt ? tender.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('tender_index') }}">back to list</a>
+
+    <a href="{{ path('tender_edit', {'id': tender.id}) }}">edit</a>
+
+    {{ include('tender/_delete_form.html.twig') }}
+{% endblock %}
