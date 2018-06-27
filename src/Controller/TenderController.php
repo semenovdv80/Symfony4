@@ -2,7 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Category;
 use App\Entity\Tender;
+use Doctrine\Common\EventManager;
+use Gedmo\Tree\TreeListener;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,29 +21,35 @@ class TenderController extends Controller
      */
     public function index(): Response
     {
-        $aData['todaylots'] = number_format($this->getDoctrine()->getRepository(Tender::class)->getTodayTendersCount());
-        $aData['sumtoday'] = $this->getDoctrine()->getRepository(Tender::class)->getTodayTendersSum();
+        $tenderRep = $this->getDoctrine()->getRepository(Tender::class);
+        $aData['todaylots'] = number_format($tenderRep->getTodayTendersCount());
+        $aData['sumtoday'] = number_format($tenderRep->getTodayTendersSum()/1000000);
+        $aData['toptenders'] = $tenderRep->getTopTenders();
+        $aData['categories'] = [];
 
-        $aData['toplots'] = $this->getDoctrine()->getRepository(Tender::class)->getTopTenders();
+        return $this->render('tender/index.html.twig', $aData);
+    }
 
+    /**
+     * @Route("/add", name="tender_add", methods="GET")
+     */
+    public function add()
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        $repo = $this->getDoctrine()->getRepository(Category::class);
 
-        dd(var_dump($aData['toplots']));
+        $food = new Category();
+        $food->setTitle('Food');
 
+        $fruits = new Category();
+        $fruits->setTitle('Fruits');
+        $fruits->setParent($food);
 
+        $repo->persist($food);
+        $repo->persistAsFirstChildOf($fruits, $food);
 
+        $repo->flush();
 
-
-        $tenders = $this->getDoctrine()
-            ->getRepository(Tender::class)
-            ->findAll();
-
-        return $this->render('tender/index.html.twig', ['tenders' => $tenders]);
-
-        $aData['todaylots'] = number_format(Tender::whereDate('close_date', '>=', Carbon::today())
-            ->count());
-        $aData['sumtoday'] = number_format(Tender::whereDate('close_date', '>=', Carbon::today())
-                ->sum('amount') / 1000000);
-
-
+        return true;
     }
 }

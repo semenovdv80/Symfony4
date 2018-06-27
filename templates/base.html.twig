@@ -2,11 +2,86 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
+        <meta charset="utf-8">
+        <title>{% block title %}Форте Бот- портал о всех закупках и тендерах Казахстана{% endblock %}</title>
+        <link rel="shortcut icon" href="" type="image/x-icon" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta content="ie=edge" http-equiv="x-ua-compatible">
+        <meta name="format-detection" content="telephone=no">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,400i,600,700,800&amp;subset=cyrillic" rel="stylesheet">
+        <link rel="stylesheet" href="{{asset('css/main.min.css')}}">
+        {{ block ('stylesheets') }}
     </head>
-    <body>
-        {% block body %}{% endblock %}
+    <body class="container-fluid">
+    <noscript><div><img src="https://mc.yandex.ru/watch/48754400" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+    <!-- /Yandex.Metrika counter -->
+    <div class="wrapper">
+        <header class="header" id="header">
+            <div class="container linewrap">
+                <nav class="nav">
+                    <a href="{{ path('tender_index') }}" class="nav__logo">
+                        <img src="{{asset('img/logo.png')}}" alt="TENDERBOT">
+                    </a>
+                    {{ block ('nav_menu') }}
+                    <div class="header-nav-data">
+                        <div class="header-nav-data__icon icon-phone"></div>
+                        <div class="header-nav-data-content">
+                            <a href="tel:+77470942052" class="header-phone">+7 747 094 20 52</a>
+                            <div class="header-auth">
+                                {% if not app.user %}
+                                <div class="header-login">
+                                    <button class='button open-login-popup'>Войти в личный кабинет</button>
+                                </div>
+                                {% else %}
+                                <div class="header-login">
+                                    <div class="user-name js-dropdown-details">
+                                        {{ 1 }}
+                                    </div>
+                                </div>
+                                <ul class="header-dropdown js-dropdown-menu">
+                                    <li class='header-dropdown-item'>
+                                        <a href="" class='header-dropdown-link'>Личный кабинет</a>
+                                    </li>
+                                    <li class='header-dropdown-item'>
+                                        <a href="" class='header-dropdown-link'>Выход</a>
+                                    </li>
+                                </ul>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                </nav>
+                <div class="burger-mobile" id="js-toggle-menu">
+                    <span></span><span></span><span></span>
+                </div>
+            </div>
+            {% if block('breadcrumbs') %}
+            {% block breadcrumbs %}{% endblock %}
+            {% endif %}
+        </header>
+        <div class="content">
+            {{ block ('content') }}
+        </div>
+
+        <footer class="footer">
+            <div class="container linewrap">
+                <nav class="nav">
+                    <div class="nav__logo">
+                        <img src="{{asset('img/logo.png')}}" alt="TENDERBOT">
+                    </div>
+                    {{ block ('nav_menu') }}
+                </nav>
+            </div>
+
+            <div class="footer-copyright">
+                <div class="container">
+                    <p>© 2017 tendenderbot. Все права защищены.</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+    {% block body %}{% endblock %}
         {% block javascripts %}{% endblock %}
     </body>
 </html>

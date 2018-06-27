@@ -27,6 +27,11 @@ class Lot
      */
     private $tender;
 
+    /**
+     * @ORM\Column(name="name", type="string", nullable=false)
+     */
+    private $name;
+
     public function getTender(): ?Tender
     {
         return $this->tender;

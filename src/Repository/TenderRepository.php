@@ -40,15 +40,16 @@ class TenderRepository extends ServiceEntityRepository
     public function getTodayTendersSum()
     {
         return $this->createQueryBuilder('t')
-            ->select("sum(t.amount) as sum_amount")
+            ->select("sum(t.amount)")
             ->getQuery()
+            ->getSingleScalarResult()
             ;
     }
 
     public function getTopTenders()
     {
         return $this->createQueryBuilder('t')
-            ->select('t.nameRu', 'l.id AS lot_id')
+            ->select('t.id', 't.nameRu', 't.amount', 'l.id AS lot_id')
             ->leftJoin('t.lots', 'l')
             ->getQuery()
             ->getResult()

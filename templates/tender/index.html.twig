@@ -2,84 +2,608 @@
 
 {% block title %}Tender index{% endblock %}
 
-{% block body %}
-    <h1>Tender index</h1>
+{% block stylesheets %}
+<style>
+    @media (min-width: 1024px) {
+        .header {
+            background: rgba(255, 255, 255, 0.001);
+        }
+    }
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>UserId</th>
-                <th>TypeId</th>
-                <th>MethodId</th>
-                <th>NameRu</th>
-                <th>FullDescription</th>
-                <th>Customer</th>
-                <th>BinInn</th>
-                <th>Rnn</th>
-                <th>Organizer</th>
-                <th>Amount</th>
-                <th>Location</th>
-                <th>KatoId</th>
-                <th>OpenDate</th>
-                <th>CloseDate</th>
-                <th>AppPlaceGet</th>
-                <th>AppOpenDate</th>
-                <th>AppPlaceOpen</th>
-                <th>Agent</th>
-                <th>Link</th>
-                <th>Activity</th>
-                <th>Gzid</th>
-                <th>FileCdocs</th>
-                <th>FileItogs</th>
-                <th>Published</th>
-                <th>CreatedAt</th>
-                <th>UpdatedAt</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for tender in tenders %}
-            <tr>
-                <td>{{ tender.id }}</td>
-                <td>{{ tender.userId }}</td>
-                <td>{{ tender.typeId }}</td>
-                <td>{{ tender.methodId }}</td>
-                <td>{{ tender.nameRu }}</td>
-                <td>{{ tender.fullDescription }}</td>
-                <td>{{ tender.customer }}</td>
-                <td>{{ tender.binInn }}</td>
-                <td>{{ tender.rnn }}</td>
-                <td>{{ tender.organizer }}</td>
-                <td>{{ tender.amount }}</td>
-                <td>{{ tender.location }}</td>
-                <td>{{ tender.katoId }}</td>
-                <td>{{ tender.openDate ? tender.openDate|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ tender.closeDate ? tender.closeDate|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ tender.appPlaceGet }}</td>
-                <td>{{ tender.appOpenDate ? tender.appOpenDate|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ tender.appPlaceOpen }}</td>
-                <td>{{ tender.agent }}</td>
-                <td>{{ tender.link }}</td>
-                <td>{{ tender.activity ? tender.activity|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ tender.gzid }}</td>
-                <td>{{ tender.fileCdocs }}</td>
-                <td>{{ tender.fileItogs }}</td>
-                <td>{{ tender.published ? 'Yes' : 'No' }}</td>
-                <td>{{ tender.createdAt ? tender.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ tender.updatedAt ? tender.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>
-                    <a href="{{ path('tender_show', {'id': tender.id}) }}">show</a>
-                    <a href="{{ path('tender_edit', {'id': tender.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="28">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    .footer {
+        margin-top: -55px;
+    }
+</style>
+{% endblock %}
 
-    <a href="{{ path('tender_new') }}">Create new</a>
+{% block nav_menu %}
+{{ include('shared/nav.html.twig') }}
+{% endblock %}
+
+{% block content %}
+    <section class="main-banner">
+        <div class="container">
+            <h1 class="main-banner__title">
+                Получите доступы ко всем тендерам Казахстана - бесплатно!
+            </h1>
+            <div class="main-banner-description">
+
+                <form action="#" id="banner-form" class="main-banner-form">
+                    <div class="main-banner-form__item">
+                        <input type="text" name="name" class="ui_input" placeholder="Имя">
+                    </div>
+
+                    <div class="main-banner-form__item">
+                        <input type="text" name="phone" class="ui_input js-phone-mask" placeholder="Телефон">
+                    </div>
+
+                    <div class="main-banner-form__item">
+                        <button type="button" id="banner-form-submit" class="ui_btn">Получить доступ</button>
+                    </div>
+                </form>
+                <div class="main-banner-description__item">
+                    TENDERBOT каждый день ищет интересующие Вас тендеры
+                    и присылает Вам письмо со списком всех вчерашних тендеров, соответствующих Вашим условиям поиска
+                </div>
+            </div>
+            {% if not app.user %}
+            <button type='button' class="ui_btn  js-reg-modal-form">
+                Попробовать
+            </button>
+            {% endif %}
+        </div>
+        <a href="#tenders" class="ui_page-scroll-btn">
+            <span class="icon-next-block"></span>
+        </a>
+    </section>
+    <section class="b-small-banner">
+        <a href="" class="b-small-banner__link"><img src="{{asset('img/banner-small.jpg')}}" alt=""></a>
+        <a href="http://pko.crp.kz/" class="b-small-banner__link" target="_blank"><img src="{{asset('img/banner-small-link.jpg')}}" alt="banner" ></a>
+    </section>
+    <section id='tenders' class="b-tenders">
+        <h2 class="ui_title">
+            <span>Сегодня есть {{ todaylots }} тендеров на {{sumtoday}} млн.</span>
+        </h2>
+        <div class="container">
+            <div class="m-tenders-table">
+                <div class="m-tenders-table-categories">
+                    <div class="m-tenders-table-head">
+                        Товарные категории тендеров
+                    </div>
+                    <ul class="m-tenders-table-switcher tabs-control">
+                        <li class="tabs-control__item primary">Товары</li>
+                        <li class="tabs-control__item">Услуги</li>
+                    </ul>
+                    <ul class="tabs-list">
+                        <li class="tabs-list__item active">
+                            <ul class="m-tenders-table-list">
+                                {% for category in categories %}
+                                    555
+                                {% endfor %}
+                            </ul>
+                        </li>
+                        <li class="tabs-list__item">
+                            <ul class="m-tenders-table-list">
+                                {% for category in categories %}
+                                    555
+                                {% endfor %}
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <div class="m-tenders-table-lots_w">
+                    <table class="m-tenders-table-lots ui_table">
+                        <thead class="m-tenders-table-head">
+                        <tr>
+                            <th>№
+                                лота
+                            </th>
+
+                            <th>
+                                Прием
+                                заявок до
+                            </th>
+
+                            <th>
+                                Название закупаемого товара <br>
+                                или услуги
+                            </th>
+
+                            <th>
+                                Сумма
+                                закупки, тг
+                            </th>
+                            <th>
+                                Регион закупки
+                            </th>
+                        </tr>
+                        </thead>
+
+                        <tbody class="m-tenders-table-body" id="tenders-list">
+                        {% for toptender in toptenders %}
+                            <tr>
+                                <td>{{toptender.id}}</td>
+                                <td></td>
+                                <td>{{toptender.nameRu}}</td>
+                                <td>{{toptender.amount}}</td>
+                                <td></td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Tooltips -->
+                <div id='tt_table_hint_1' class='m-tt-body tr-left table-subhead-1'>
+                    <div class="m-tt-close js-tt-close">
+                        <svg class="svg-icon" xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24">
+                            <g>
+                                <path d="M14.85,12l8.56-8.56A2,2,0,0,0,20.56.59L12,9.15,3.44.59A2,2,0,0,0,.59,3.44L9.15,12,.59,20.56a2,2,0,0,0,2.85,2.85L12,14.85l8.56,8.56a2,2,0,0,0,2.85-2.85Z"></path>
+                            </g>
+                        </svg>
+                    </div>
+                    <div class='m-tt-text'>Кликните по треугольнику, чтобы посмотреть подрубрики</div>
+                    <div class='ui_checkbox tooltip'>
+                        <input type="checkbox" id='tt_checkbox_table_hint_1' class='js-tt-checkbox' data-tooltip='tt_table_hint_1'>
+                        <label for="tt_checkbox_table_hint_1" class='label'>
+                            <span class="box"></span>
+                            Больше не показывать эту подсказку
+                        </label>
+                    </div>
+                </div>
+                <div id='tt_table_hint_2' class='m-tt-body tr-top table-subhead-2'>
+                    <div class="m-tt-close js-tt-close">
+                        <svg class="svg-icon" xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24">
+                            <g>
+                                <path d="M14.85,12l8.56-8.56A2,2,0,0,0,20.56.59L12,9.15,3.44.59A2,2,0,0,0,.59,3.44L9.15,12,.59,20.56a2,2,0,0,0,2.85,2.85L12,14.85l8.56,8.56a2,2,0,0,0,2.85-2.85Z"></path>
+                            </g>
+                        </svg>
+                    </div>
+                    <div class='m-tt-text'>Кликните по названию товара или услуги, чтобы посмотреть подробную информацию по тендеру</div>
+                    <div class='ui_checkbox tooltip'>
+                        <input type="checkbox" id='tt_checkbox_table_hint_2' class='js-tt-checkbox' data-tooltip='tt_table_hint_2'>
+                        <label for="tt_checkbox_table_hint_2" class='label'>
+                            <span class="box"></span>
+                            Больше не показывать эту подсказку
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="b-tenders-regblock">
+                <div class="b-tenders-regblock-btn-wrap">
+                    <button type='button' class="ui_btn js-reg-modal-form">Регистрация</button>
+                </div>
+                <div class="b-tenders-regblock__desc">
+                    <span>
+                        Зарегистрируйтесь
+                        и получите доступ к базе тендеров. <br>
+                        Это бесплатно !
+                    </span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="how" id="how">
+        <h2 class="ui_title">
+            <span>Как работает TENDERBOT</span>
+        </h2>
+
+        <div class="container">
+            <div class="how-list">
+                <div class="how-list-item">
+                    <div class="how-list-item_w">
+                        <div class="how-list-item-title_w">
+                            <div class="how-list-item__icon icon-order">
+                            </div>
+                            <h3 class="how-list-item__title">
+                                Вы указываете в личном кабинете, <br>
+                                какие тендеры Вас интересуют
+                            </h3>
+                        </div>
+                        <div class="how-list-item__content">
+                            Выбираете наименование продукции или услуг, объем закупки,
+                            регионы закупки, вид закупки (аукционы, тендеры, открытые торги
+                            и т. д.), чтобы Ваша программа-бот поняла, какие тендеры она будет
+                            искать для Вас.
+                        </div>
+                    </div>
+                </div>
+                <div class="how-list-item">
+                    <div class="how-list-item_w">
+                        <div class="how-list-item-title_w">
+                            <div class="how-list-item__icon icon-search">
+                            </div>
+                            <h3 class="how-list-item__title">
+                                Каждый день <br>
+                                наш бот ищет подходящие
+                            </h3>
+                        </div>
+
+                        <div class="how-list-item__content">
+                            Наш бот ежедневно просматривает более 1000 сайтов, на которых размещены 98% тендеров
+                            Казахстана от государственных и частных компаний. Бот просматривает сотни и тысячи тендеров
+                            и выбирает те, которые соответствуют Вашему запросу.
+                        </div>
+                    </div>
+                </div>
+                <div class="how-list-item">
+                    <div class="how-list-item_w">
+                        <div class="how-list-item-title_w">
+                            <div class="how-list-item__icon icon-mail">
+                            </div>
+                            <h3 class="how-list-item__title">
+                                ...и присылает Вам список тендеров <br>
+                                на емейл в 8:00 каждый день
+                            </h3>
+                        </div>
+
+                        <div class="how-list-item__content">
+                            <p>
+                                В этом списке все тендеры Казахстана, которые соответствуют
+                                Вашим условиям поиска, объявленные вчера.
+                            </p>
+                            <p>
+                                Представьте, Вы приезжаете в офис, открываете почту, а там уже
+                                лежит свежая подборка реальных тендеров по Вашей продукции
+                                или услугам за вчерашний день.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="how-list-item">
+                    <div class="how-list-item_w">
+                        <div class="how-list-item-title_w">
+                            <div class="how-list-item__icon icon-tenders">
+                            </div>
+                            <h3 class="how-list-item__title">
+                                Вы выбираете подходящие тендеры <br>
+                                и оформляете заявку на участие
+                            </h3>
+                        </div>
+
+                        <div class="how-list-item__content">
+                            <p>
+                                Выбрав подходящий тендер, Вы переходите по ссылке в письме и
+                                получаете подробное описание, контакты заказчика и список
+                                документов, необходимых для участия в тендере.
+                            </p>
+
+                            <p>
+                                Пока Ваши конкуренты ищут этот тендер по тысячам сайтов (часто так и не находят), Вы уже оформляете заявку!
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </section>
+
+    <section class="rates" id="rates">
+        <h2 class="ui_title"><span>Тарифные планы</span></h2>
+
+        <div class="container">
+            <div class="rates-table_w">
+                <div class="rates-table">
+                    <div class="rates-table-head">
+                        <div class="rates-table-head__item"></div>
+                        <div class="rates-table-head__item half-year ">Для клиентов "ForteBank"</div>
+                        <div class="rates-table-head__item year">Годовой</div>
+                    </div>
+                    <div class="rates-table-row">
+                        <div class="rates-table-row__item param">Кому идеально подходит</div>
+                        <div class="rates-table-row__item half-year  think">
+                            Компаниям, <br>
+                            постоянно <br>
+                            ищущим новые тендеры
+                        </div>
+                        <div class="rates-table-row__item year think">
+                            Компаниям, <br>
+                            постоянно <br>
+                            ищущим новые тендеры
+                        </div>
+                    </div>
+                    <div class="rates-table-row">
+                        <div class="rates-table-row__item param">
+                            Личный кабинет со всеми <br>
+                            настройками поиска тендеров
+                        </div>
+                        <div class="rates-table-row__item half-year ">
+                            <span>+</span>
+                        </div>
+                        <div class="rates-table-row__item year">
+                            <span>+</span>
+                        </div>
+                    </div>
+                    <div class="rates-table-row">
+                        <div class="rates-table-row__item param">
+                            <span class="question" data-tooltip="tooltip-1"></span>
+                            Количество ботов <br> (один бот
+                            для одного фильтра поиска)
+                        </div>
+                        <div class="rates-table-row__item half-year ">
+                            <span>&#8734;</span>
+                        </div>
+                        <div class="rates-table-row__item year">
+                            <span>&#8734;</span>
+                        </div>
+                    </div>
+                    <div class="rates-table-row">
+                        <div class="rates-table-row__item param">
+                            Ежедневное письмо с
+                            результатами поиска по всем
+                        </div>
+                        <div class="rates-table-row__item half-year ">
+                            <span>+</span>
+                        </div>
+                        <div class="rates-table-row__item year">
+                            <span>+</span>
+                        </div>
+                    </div>
+                    <div class="rates-table-row">
+                        <div class="rates-table-row__item param">
+                            Срок действия тарифного плана
+                        </div>
+                        <div class="rates-table-row__item half-year ">
+                            12 месяцев
+                        </div>
+                        <div class="rates-table-row__item year">
+                            12 месяцев
+                        </div>
+                    </div>
+                    <div class="rates-table-row">
+                        <div class="rates-table-row__item param">
+                            <span class="question" data-tooltip="tooltip-3"></span>
+                            Техническая поддержка
+                        </div>
+                        <div class="rates-table-row__item half-year ">
+                            Чат, е-mail,
+                            телефон
+                        </div>
+                        <div class="rates-table-row__item year">
+                            Чат, е-mail,
+                            телефон
+                        </div>
+                    </div>
+                    <div class="rates-table-row">
+                        <div class="rates-table-row__item param">
+                            Стоимость тарифного плана, тг
+                        </div>
+                        <div class="rates-table-row__item half-year ">
+                           Бесплатно
+                        </div>
+                        <div class="rates-table-row__item year ">
+                            200 000
+                        </div>
+                    </div>
+                </div>
+                <div class="rates-btns">
+                    <div class="rates-btns-item"></div>
+                    <div class="rates-btns-item">
+                        <button class="ui_btn js-tariff-plan" data-plan='Для клиентов "ForteBank"'>Заказать</button>
+                    </div>
+                    <div class="rates-btns-item">
+                        <button class="ui_btn js-tariff-plan" data-plan='Годовой'>Заказать</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="check">
+        <h2 class="ui_title">
+            <span>Как Ваш TENDERBOT экономит Вам деньги
+            на поиске тендеров</span>
+        </h2>
+        <div class="container">
+            <div class="check-info">
+                <div class="check-info__text">
+                    <p>
+                        Посчитайте, сколько Вам стоит поиск тендеров силами своих сотрудников,
+                        и сравните со стоимостью поиска с помощью TENDERBOT.
+                        И если окажется, что TENDERBOT найдет Вам тендеры дешевле, то зачем платить больше?
+                    </p>
+
+                    <p>
+                        Идея проста. Вы платите сотруднику зарплату (и налоги на заработную плату),
+                        он работает 21-22 рабочих дня по 8 часов.
+                        Делим заработную плату с налогами на 22 и на 8 и получаем стоимость его часа.
+                    </p>
+                    <p>
+                        Для того, чтобы выигрывать 1 тендер в месяц, нужно подавать 5 заявок (наша статистика за 5 лет).
+                        Чтобы найти 5 заявок, нужно искать тендеры по 8 часов в день (наша статистика за 5 лет).
+                    </p>
+                    <p>
+                        Умножаем количество часов поиска на стоимость часа,
+                        получаем стоимость поиска за день. TENDERBOT дешевле.
+                        Так пусть же бот внимательно и дешево ищет тендеры,
+                        а сотрудники зарабатывают деньги для Вашей компании!
+                    </p>
+                </div>
+                {% if not app.user %}
+                <div class='check-info-btn-wrap'>
+                    <button type='button' class="ui_btn js-reg-modal-form">Попробовать в деле</button>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+
+    <section class="faq" id="faq">
+        <h2 class="ui_title"><span>Часто задаваемые вопросы</span></h2>
+        <div class="container">
+            <div class="faq-list">
+               <div class="faq-list-item">
+                   <div class="faq-list-item__question">Что такое бот и сколько их у меня будет?</div>
+                   <div class="faq-list-item__answer">
+                       <p>
+                           Бот - это специальная программа на нашем сайте. Она каждый день полностью просматривает сотни сайтов с опубликованными тендерами Казахстана.
+                           Среди сотен и тысяч тендеров она находит подходящие для Вас, в соответствии с Вашими настройками поиска. Все тендеры, попадающие в настройки
+                           поиска, бот присылает на Ваш емейл каждый день в 8:00 утра.
+                       </p>
+
+                       <p>
+                           Каждый бот может искать по одному настроенному фильтру, например, тендеры на закупку канцелярских принадлежностей. Чтобы одновременно
+                           с канцелярскими принадлежностями искать еще и обслуживание принтеров, нужен еще один бот. Для третьего поиска потребуется третий бот, и так
+                           далее - чем больше тендеров Вы ищете одновременно, тем больше ботов Вам нужно.
+                       </p>
+
+                       <p>Вы можете изменить настройки бота, например, с канцелярских принадлежностей перенастроить его на
+                           офисную бумагу А4.</p>
+
+                   </div>
+               </div>
+                <div class="faq-list-item">
+                    <div class="faq-list-item__question">Я смогу самостоятельно настроить для ботов поиск? </div>
+                    <div class="faq-list-item__answer">
+                        <p>
+                            Конечно. Это очень просто. В личном кабинете Вы указываете товары или услуги, которые хотите продавать через тендеры, регионы, в которых Вы работаете в Казахстане, минимальный размер тендера, и этого достаточно, чтобы бот нашел нужные Вам тендеры. Если хотите, можно указать тип заказчика - государственная или частная компания, и тип торгов (тендер, аукцион и т. д.).
+                        </p>
+
+                        <p>
+                            <a href="#" class="js-openRegisterModal" >Если у Вас еще нет личного кабинета, кликайте сюда, чтобы попробовать - это бесплатно!</a>
+                        </p>
+
+                    </div>
+                </div>
+                <div class="faq-list-item">
+                    <div class="faq-list-item__question">Что будет приходить в письме от бота?</div>
+                    <div class="faq-list-item__answer">
+                        <p>
+                            В письме от бота будет список тендеров, соответствующих Вашим условиям поиска. Будет указано наименование закупаемой продукции или услуги,
+                            сумма тендера, кто заказчик, регион закупки, крайний срок подачи заявок и ссылка на скачивание тендерной документации для оформления заявки.
+                            Выглядит это так: <a href="#">скриншот письма</a>
+                        </p>
+                    </div>
+                </div>
+                <div class="faq-list-item">
+                    <div class="faq-list-item__question">Что я получу от бота, если вчера не было объявлено ни одного подходящего тендера, ни на одном сайте?</div>
+                    <div class="faq-list-item__answer">
+                        <p>
+                            Бывает, что по интересующей Вас продукции или услуге вчера не было объявлено ни одного тендера. В этом случае бот пришлет сообщение, что
+                            вчера не было опубликовано интересующих Вас тендеров.
+                        </p>
+                        <p>
+                            Вот еще одна выгода TENDERBOT: если тендеры ищет Ваш сотрудник, то ему придется просмотреть все сайты, чтобы убедиться, что нет ни одного
+                            свежего тендера. Это займет у него весь день.
+                        </p>
+                        <p>
+                            Вы заплатите ему за этот день стоимость полного рабочего дня. При заработной плате в 90 тыс. тг это 2 410 тг. Другими словами, Вы платите сотруднику 2 410 тг за то, чтобы узнать, что вчера не было ни одного нового подходящего тендера. TENDERBOT сообщит Вам об этом за 320 тг.
+                        </p>
+                    </div>
+                </div>
+                <div class="faq-list-item">
+                    <div class="faq-list-item__question">Что дает техподдержка и как она работает?</div>
+                    <div class="faq-list-item__answer">
+                        <p>
+                            Техподдержка поможет Вам настроить поиск тендеров и ответит на возникшие вопросы по оформлению тендерной документации. Техподдержка отвечает Вам на емейл, в живом чате и по
+                            телефону.
+                        </p>
+                        <p>
+                            Техподдержка работает с 9:00 до 18:00 в рабочие дни, выходной суббота и воскресенье, а также государственные праздники.
+                        </p>
+                    </div>
+                </div>
+                <div class="faq-list-item">
+                    <div class="faq-list-item__question">Как подключить услугу TENDERBOT?</div>
+                    <div class="faq-list-item__answer">
+                        <p>
+                            Чтобы подключить TENDERBOT, Вам нужно зарегистрироваться и в личном кабинете выбрать подходящий тарифный план. Мы получим Вашу заявку,
+                            Вам перезвонит наш сотрудник, уточнит детали, и пришлет договор и счет. Подписываем договор, Вы оплачиваете счет, мы в тот же день активируем
+                            Ваш тарифный план, и Вы начинаете поиск тендеров.
+                        </p>
+                    </div>
+                </div>
+                <div class="faq-list-item">
+                    <div class="faq-list-item__question">Как оплатить TENDERBOT?</div>
+                    <div class="faq-list-item__answer">
+                        <p>По безналичному расчету или любой картой любого банка. Для оплаты по безналичному расчету мы заключим договор и пришлем счет.</p>
+                        <p>
+                            При оплате картой Вы принимаете условия договора оферты, оплачиваете выбранный тарифный план на нашем сайте через защищенный сервис
+                            оплаты и получаете мгновенный доступ к настройкам поиска.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="ask" id="ask">
+        <div class="container">
+            <div class="ask_w">
+                <div class="ask-label">
+                    <div class="ask-label__text">Остались вопросы? Спросите у менеджера</div>
+                    <div class="ask-label-phone">
+                        <div class="icon-phone"></div>
+                        <div class="ask-label-phone__number"><a href="tel:+77470942052">+7 747 094 20 52</a></div>
+                    </div>
+                </div>
+                <form action="#" id='callback_form' class="ask-form">
+                    <input id="phone-input"
+                           class="ask-form__input js-phone-mask"
+                           type="tel"
+                           name="phone">
+                    <button type="button" id="callback-btn" class="ui_btn ask-form__submit">Перезвоните мне</button>
+                </form>
+            </div>
+        </div>
+    </section>
+    <section class="b-map" id="contacts">
+        <div id="map" class='b-map-google'></div>
+        <div class="container b-map-container">
+            <div class="b-map-info">
+                <h3 class="b-map-title">Наши контакты</h3>
+                <div class="b-map-info-item_w">
+                    <div class="b-map-info-item">
+                        <div class="b-map-info-item-icon_w">
+                            <div class="b-map-info-item__icon icon-map-mail"></div>
+                        </div>
+                        <a href="mailto:email@tenderbot.kz" class="b-map-info-item__mail">info@tenderbot.kz</a>
+                    </div>
+                    <div class="b-map-info-item">
+                        <div class="b-map-info-item-icon_w">
+                            <div class="b-map-info-item__icon icon-map-pin"></div>
+                        </div>
+                        <div class="b-map-info-item__address">г. Астана Ул. Сарайшык 5/1</div>
+                    </div>
+                </div>
+                <div class="b-map-info-item">
+                    <div class="b-map-info-item-icon_w">
+                        <div class="b-map-info-item__icon icon-map-phone"></div>
+                    </div>
+                    <div class="b-map-info-item__phone">
+                        <a href="tel:+77470942052">+7 747 094 20 52</a>
+                    </div>
+                </div>
+
+                <form action="#" id='contact_form' class="b-map-form">
+                    <div class="b-map-form-title">Напишите нам!</div>
+                    <div class='b-map-fields'>
+                        <div class="b-map-item field">
+                            <input type="text" name="name" class="js-input" placeholder="Введите Ваше имя" >
+                            <div class="ui_error name-error"></div>
+                        </div>
+                        <div class="b-map-item field">
+                            <input type="email" name="email" class="js-input" placeholder="Введите Ваш емейл" required>
+                            <div class="ui_error email-error"></div>
+                        </div>
+                    </div>
+                    <div class="b-map-item textarea">
+                        <textarea name="message" placeholder="Введите Ваш вопрос или сообщение" class="js-input" required></textarea>
+                        <div class="ui_error message-error"></div>
+                    </div>
+                    <div class="b-map-wrap">
+                        <div class="g-recaptcha" data-sitekey="6LfSgjsUAAAAAHhfkxZbhoFvpBRW4Af9XguBQrCl"></div>
+                        <div class="ui_error captcha-error"></div>
+                        <div class='b-map-btn'>
+                            <button type="button" id="contact-btn" class="ui_btn">Отправить</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
 {% endblock %}

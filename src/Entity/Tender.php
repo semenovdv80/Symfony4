@@ -31,6 +31,13 @@ class Tender
     private $nameRu;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="amount", type="integer", nullable=false, options={"unsigned"=true})
+     */
+    private $amount;
+
+    /**
      * @ORM\OneToMany(targetEntity="App\Entity\Lot", mappedBy="tender")
      */
     private $lots;
