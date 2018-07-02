@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @Gedmo\Tree(type="nested")
  * @ORM\Table(name="categories")
  * use repository for handy tree functions
- * @ORM\Entity(repositoryClass="App\Repository\CategoryRepository")
+ * @ORM\Entity(repositoryClass="Gedmo\Tree\Entity\Repository\NestedTreeRepository")
  */
 class Category
 {
@@ -45,7 +45,7 @@ class Category
     /**
      * @Gedmo\TreeRoot
      * @ORM\ManyToOne(targetEntity="Category")
-     * @ORM\JoinColumn(name="tree_root", referencedColumnName="id", onDelete="CASCADE")
+     * @ORM\JoinColumn(name="root_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $root;
 

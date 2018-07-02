@@ -36,7 +36,6 @@ class TenderController extends Controller
     public function add()
     {
         $em = $this->getDoctrine()->getEntityManager();
-        $repo = $this->getDoctrine()->getRepository(Category::class);
 
         $food = new Category();
         $food->setTitle('Food');
@@ -45,10 +44,10 @@ class TenderController extends Controller
         $fruits->setTitle('Fruits');
         $fruits->setParent($food);
 
-        $repo->persist($food);
-        $repo->persistAsFirstChildOf($fruits, $food);
+        $em->persist($food);
+        $em->persist($fruits);
 
-        $repo->flush();
+        $em->flush();
 
         return true;
     }
