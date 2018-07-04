@@ -51,6 +51,7 @@ class TenderRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('t')
             ->select('t.id', 't.nameRu', 't.amount', 'l.id AS lot_id')
             ->leftJoin('t.lots', 'l')
+            ->setMaxResults(5)
             ->getQuery()
             ->getResult()
             ;
