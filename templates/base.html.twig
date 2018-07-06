@@ -9,8 +9,9 @@
         <meta content="ie=edge" http-equiv="x-ua-compatible">
         <meta name="format-detection" content="telephone=no">
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,400i,600,700,800&amp;subset=cyrillic" rel="stylesheet">
-        <link rel="stylesheet" href="{{asset('css/main.min.css')}}">
-        {{ block ('stylesheets') }}
+        {% block stylesheets %}
+            <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+        {% endblock %}
     </head>
     <body class="container-fluid">
     <noscript><div><img src="https://mc.yandex.ru/watch/48754400" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
@@ -22,7 +23,7 @@
                     <a href="{{ path('tender_index') }}" class="nav__logo">
                         <img src="{{asset('img/logo.png')}}" alt="TENDERBOT">
                     </a>
-                    {{ block ('nav_menu') }}
+                    {% block nav_menu %}{% endblock %}
                     <div class="header-nav-data">
                         <div class="header-nav-data__icon icon-phone"></div>
                         <div class="header-nav-data-content">

@@ -2222,10 +2222,6 @@ textarea:focus {
   outline: 0 none;
 }
 
-input[type="checkbox"] {
-  display: none;
-}
-
 .container {
   margin: 0 auto;
   max-width: 1620px;
@@ -6351,3 +6347,4 @@ input[type="checkbox"] {
     display: none;
   }
 }
+

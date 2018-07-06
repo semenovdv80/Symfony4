@@ -1,0 +1,8 @@
+<h4>Вы зарегистрировались на сайте</h4>
+
+Чтобы активировать ваш аккаунт пожалуйста, перейдите по: <a href="{{ url('activeuser', {'active_code': active_code}) }}">Ссылке</a>.
+
+Спасибо!
+
+{# Создаёт абсолютный URL к файлу /images/logo.png #}
+<img src="{{ absolute_url(asset('images/logo.png')) }}">

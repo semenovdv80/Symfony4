@@ -52,6 +52,16 @@ class User implements UserInterface
      */
     private $roles;
 
+    /**
+     * @ORM\Column(type="string", length=191)
+     */
+    private $activeCode;
+
+    /**
+     * @ORM\Column(type="smallint", nullable=true,)
+     */
+    private $status;
+
     public function __construct()
     {
         $this->roles = array('ROLE_USER');
@@ -113,5 +123,25 @@ class User implements UserInterface
 
     public function eraseCredentials()
     {
+    }
+
+    public function getActiveCode()
+    {
+        return $this->activeCode;
+    }
+
+    public function setActiveCode($code)
+    {
+        $this->activeCode = $code;
+    }
+
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    public function setStatus($status)
+    {
+        $this->status = $status;
     }
 }
