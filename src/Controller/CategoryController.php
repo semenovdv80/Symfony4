@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Category;
+use App\Helper\Translater;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -11,7 +12,25 @@ use Symfony\Component\HttpFoundation\Request;
 class CategoryController extends Controller
 {
     /**
-     * Show categories tree
+     * Admin Panel : Show list of categories
+     *
+     * @Route("/admin/category/list", name="admin_category_list")
+     */
+    public function admin_category_list(Request $request)
+    {
+        Translater::setLocale($request->getLocale());
+        $breadcrumbs = $this->get("white_october_breadcrumbs");
+        $breadcrumbs->addItem(Translater::show('Admin Panel'), $this->get("router")->generate("admin"));
+        $breadcrumbs->addItem(Translater::show('List of categories'), $this->get("router")->generate("admin_category_list"));
+
+        return $this->render('admin/categories/index.html.twig', [
+            'page_title' => Translater::show('List of categories'),
+            'active_menu' => 'admin_categories'
+        ]);
+    }
+
+    /**
+     * Admin Panel : Show categories tree
      *
      * @Route("/admin/category/gettree", name="admin_category_gettree")
      * @return JsonResponse
@@ -32,7 +51,7 @@ class CategoryController extends Controller
     }
 
     /**
-     * Move node by tree
+     * Admin Panel : Move node by tree
      *
      * @Route("/admin/category/settree", name="admin_category_settree")
      * @param Request $request
@@ -59,7 +78,7 @@ class CategoryController extends Controller
     }
 
     /**
-     *  Create new category
+     *  Admin Panel : Create new category
      *
      * @Route("/admin/category/add", name="admin_category_add")
      * @param Request $request
@@ -90,7 +109,7 @@ class CategoryController extends Controller
     }
 
     /**
-     *  Edit category
+     *  Admin Panel : Edit category
      *
      * @Route("/admin/category/edit", name="admin_category_edit")
      * @param Request $request

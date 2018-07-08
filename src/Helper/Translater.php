@@ -3,7 +3,6 @@
 namespace App\Helper;
 
 use Symfony\Component\Templating\Helper\Helper;
-use Symfony\Component\Translation\Loader\YamlFileLoader;
 use Symfony\Component\Translation\Translator;
 
 class Translater extends Helper

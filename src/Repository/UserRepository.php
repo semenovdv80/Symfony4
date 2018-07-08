@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\User;
+use App\Helper\PageHelper;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -17,6 +18,17 @@ class UserRepository extends ServiceEntityRepository
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, User::class);
+    }
+
+    public function adminUserList($request)
+    {
+        $query = $this->createQueryBuilder('u')
+            //->andWhere('u.exampleField = :val')
+            //->setParameter('val', $value)
+            ->orderBy('u.id', 'ASC')
+            ->getQuery();
+
+        return PageHelper::paginate($query, $request, $limit = 2);
     }
 
 //    /**
