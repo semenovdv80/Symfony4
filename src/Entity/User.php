@@ -48,6 +48,11 @@ class User implements UserInterface
     private $password;
 
     /**
+     * @ORM\Column(type="string", nullable=true, length=191)
+     */
+    private $avatar;
+
+    /**
      * @ORM\Column(type="array")
      */
     private $roles;
@@ -107,6 +112,16 @@ class User implements UserInterface
     public function setPassword($password)
     {
         $this->password = $password;
+    }
+
+    public function getAvatar()
+    {
+        return $this->avatar;
+    }
+
+    public function setAvatar($avatar)
+    {
+        $this->avatar = $avatar;
     }
 
     public function getSalt()

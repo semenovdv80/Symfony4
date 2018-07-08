@@ -26,7 +26,8 @@
         "symfony/web-link": "^4.1",
         "symfony/webpack-encore-pack": "*",
         "symfony/yaml": "^4.1",
-        "true/punycode": "^2.1"
+        "true/punycode": "^2.1",
+        "whiteoctober/breadcrumbs-bundle": "^1.4"
     },
     "require-dev": {
         "symfony/debug-pack": "*",

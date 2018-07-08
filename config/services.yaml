@@ -28,4 +28,5 @@ services:
     # please note that last definitions always *replace* previous ones
 
 imports:
+    - { resource: config.yaml }
     - { resource: doctrine_extensions.yaml }

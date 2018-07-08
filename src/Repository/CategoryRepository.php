@@ -43,4 +43,9 @@ class CategoryRepository extends NestedTreeRepository
         ;
     }
     */
+
+    public function getTree($request)
+    {
+        
+    }
 }

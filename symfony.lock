@@ -1,1 +1,8 @@
-[]
+{
+    "symfony/templating": {
+        "version": "v4.1.1"
+    },
+    "whiteoctober/breadcrumbs-bundle": {
+        "version": "1.4.2"
+    }
+}

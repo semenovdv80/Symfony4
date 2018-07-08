@@ -20,9 +20,9 @@ class Category
     private $id;
 
     /**
-     * @ORM\Column(name="title", type="string", length=64)
+     * @ORM\Column(name="text", type="string", length=64)
      */
-    private $title;
+    private $text;
 
     /**
      * @Gedmo\TreeLeft
@@ -67,14 +67,14 @@ class Category
         return $this->id;
     }
 
-    public function setTitle($title)
+    public function setText($text)
     {
-        $this->title = $title;
+        $this->text = $text;
     }
 
-    public function getTitle()
+    public function getText()
     {
-        return $this->title;
+        return $this->text;
     }
 
     public function getRoot()
