@@ -118,6 +118,12 @@
     tree.bind("delete_node.jstree", function (e, data) {
         var id = data.node.original.id;
         var text = data.node.text;
+
+        //refuse if it's root
+        if (id ==1) {
+            noty_message('error', 'top', 'Запрет удаления категории "'+text+'"' , 1000, true);
+            return;
+        }
         $.ajax({
             url: '/admin/category/delete',
             type: 'POST',
@@ -128,7 +134,7 @@
             dataType: 'json',
             success: function (data) {
                 if (data == true) {
-                    noty_message('error', 'top', 'Запись удалена!', 1000, false);
+                    noty_message('error', 'top', 'Категория "'+text+'" удалена!', 1000, false);
                 } else {
                     noty_message('error', 'top', 'Ошибка!', 1000, false);
                 }
