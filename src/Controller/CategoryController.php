@@ -23,7 +23,7 @@ class CategoryController extends Controller
         $breadcrumbs->addItem(Translater::show('Admin Panel'), $this->get("router")->generate("admin"));
         $breadcrumbs->addItem(Translater::show('List of categories'), $this->get("router")->generate("admin_category_list"));
 
-        return $this->render('admin/categories/index.html.twig', [
+        return $this->render('admin/category/index.html.twig', [
             'page_title' => Translater::show('List of categories'),
             'active_menu' => 'admin_categories'
         ]);
@@ -91,7 +91,7 @@ class CategoryController extends Controller
 
         //get params from request
         $text = $request->get('text');
-        $parent_id = $request->get('parent');
+        $parent_id = $request->get('parent_id');
 
         //get parent category
         $parent = $repo->find($parent_id);
@@ -135,5 +135,36 @@ class CategoryController extends Controller
         $em->flush();
 
         return new JsonResponse($category->getId());
+    }
+
+    /**
+     *  Admin Panel : Delete category
+     *
+     * @Route("/admin/category/delete", name="admin_category_delete")
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function delete(Request $request)
+    {
+        //get params from request
+        $token = $request->get('token');
+        $item_id = $request->get('item_id');
+        $redirect_to = $request->get('redirect_to');
+
+        $em = $this->getDoctrine()->getManager();
+        $repo = $em->getRepository('App\Entity\Category');
+
+        //get category
+        $category = $repo->find($item_id);
+
+        //check if exists and token
+        if ($category && $this->isCsrfTokenValid('delete-item', $token)) {
+            //delete category
+            $em->remove($category);
+            $em->flush();
+            $this->get('session')->set('action_result', 'success');
+            return  new JsonResponse(true);
+        }
+        return  new JsonResponse(false);
     }
 }
