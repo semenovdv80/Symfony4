@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -50,12 +51,12 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="string", nullable=true, length=191)
      */
-    private $avatar;
+    private $phone;
 
     /**
-     * @ORM\Column(type="array")
+     * @ORM\Column(type="string", nullable=true, length=191)
      */
-    private $roles;
+    private $avatar;
 
     /**
      * @ORM\Column(type="string", length=191)
@@ -67,9 +68,15 @@ class User implements UserInterface
      */
     private $status;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="Role", inversedBy="users")
+     *
+     */
+    private $roles;
+
     public function __construct()
     {
-        $this->roles = array('ROLE_USER');
+        $this->roles = new ArrayCollection();
     }
 
     // other properties and methods
@@ -119,6 +126,16 @@ class User implements UserInterface
         $this->password = $password;
     }
 
+    public function getPhone()
+    {
+        return $this->phone;
+    }
+
+    public function setPhone($phone)
+    {
+        $this->phone = $phone;
+    }
+
     public function getAvatar()
     {
         return $this->avatar;
@@ -138,7 +155,12 @@ class User implements UserInterface
 
     public function getRoles()
     {
-        return $this->roles;
+        $roles[] = 'ROLE_USER';
+        foreach ($this->roles->toArray() as $role)
+        {
+            $roles[] = $role->getRole();
+        }
+        return $roles;
     }
 
     public function eraseCredentials()

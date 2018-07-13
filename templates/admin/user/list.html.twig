@@ -2,89 +2,98 @@
 
 {% block content %}
     <div class="content">
+        <form>
+            <div class="inline text-left" title="Показывать результатов на странице">
+                <label for="rowsPerPage">Показывать по</label>
+                <select id="rowsPerPage" name="rowsPerPage">
+                    <option value="2" {{ app.request.get('rowsPerPage') == 2 ? 'selected' : '' }}>2</option>
+                    <option value="25" {{ app.request.get('rowsPerPage') == 25 ? 'selected' : '' }}>25</option>
+                    <option value="50" {{ app.request.get('rowsPerPage') == 50 ? 'selected' : '' }}>50</option>
+                    <option value="100" {{ app.request.get('rowsPerPage') == 100 ? 'selected' : '' }}>100</option>
+                </select>
+            </div>
+            <div class="inline pull-right">
+                <label for="quickSearch">Поиск:</label>
+                <input id="quickSearch" name="quickSearch" type="text"
+                       value="{{ app.request.get('quickSearch') ?? '' }}">
+            </div>
+        </form>
         <div class="row">
             <div class="col-xs-12">
                 <div class="box">
                     <div class="panel panel-default">
-                        <div class="nav-tabs-custom">
-                            <div class="tab-content">
-                                <div class="tab-pane active">
-                                    <table id="itemsTable" class="table table-bordered table-striped dataTable" role="grid"
-                                           aria-describedby="example1_info">
-                                        <thead>
-                                        <tr role="row">
-                                            <th class="" tabindex="0"  aria-controls="example1" rowspan="1" colspan="1" data-col="id">
-                                                id
-                                            </th>
-                                            <th class="" tabindex="0" aria-controls="example1" rowspan="1"  data-col="title" style="">
-                                                email
-                                            </th>
-                                            <th class="" tabindex="0" aria-controls="example1" rowspan="1"  data-col="title" style="">
-                                                Имя пользователя
-                                            </th>
-                                            <th tabindex="0">
-                                                Компания
-                                            </th>
-                                            <th class="" tabindex="0" aria-controls="example1" rowspan="1" data-col="count">
-                                                Регион
-                                            </th>
-                                            <th class="" tabindex="0" aria-controls="example1" rowspan="1" data-col="unit_price">
-                                                Тел.
-                                            </th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        {% for user in users %}
-                                        <tr role="row" class="odd">
-                                            <td>{{user.id}}</td>
-                                            <td>
-                                                <a href="">
-                                                    {{user.email}}
-                                                </a>
-                                            </td>
-                                            <td>{{user.username}}</td>
-                                            <td></td>
-                                            <td></td>
-                                            <td>{{user.status}}</td>
-                                        </tr>
-                                        {% endfor %}
-                                        </tbody>
-                                    </table>
-                                </div>
+                        <table id="itemsTable" class="table table-bordered table-striped dataTable" role="grid">
+                            <thead>
+                            <tr role="row">
+                                <th class="order_{{ app.request.get('order_col')=='id' ? app.request.get('order_type') : '' }}"
+                                    data-col="id">
+                                    ID
+                                </th>
+                                <th class="order_{{ app.request.get('order_col')=='email' ? app.request.get('order_type') : '' }}"
+                                    data-col="email">
+                                    {{ 'E-mail'|trans }}
+                                </th>
+                                <th class="order_{{ app.request.get('order_col')=='username' ? app.request.get('order_type') : '' }}"
+                                    data-col="username">
+                                    {{ 'Username'|trans }}
+                                </th>
+                                <th class="order_{{ app.request.get('order_col')=='phone' ? app.request.get('order_type') : '' }}"
+                                    data-col="phone">
+                                    {{ 'Phone'|trans }}
+                                </th>
+                                <th tabindex="0">
+                                    Компания
+                                </th>
+                                <th class="" tabindex="0" aria-controls="example1" rowspan="1" data-col="count">
+                                    Регион
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for user in users %}
+                                <tr role="row" class="odd">
+                                    <td>{{ user.id }}</td>
+                                    <td>
+                                        <a href="">
+                                            {{ user.email }}
+                                        </a>
+                                    </td>
+                                    <td>{{ user.username }}</td>
+                                    <td>{{ user.phone }}</td>
+                                    <td></td>
+                                    <td>{{ user.status }}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-5">
+                        Показано записей: <b>{{ users.onpage }}</b> из <b>{{ users|length }}</b>
+                    </div>
+                    <div class="col-md-7 text-right">
+                        <div class="dataTables_paginate paging_simple_numbers" id="example1_paginate">
+                            {% if users.maxPages > 1 %}
+                                <ul class="pagination pagination-sm">
+                                    {# `«` arrow  #}
+                                    <li {{ users.page == 1 ? 'class="disabled"' }}>
+                                        <a href="{{ path('admin_user_list',  app.request.query|merge({page: users.page-1 < 1 ? 1 : users.page-1})) }}">«</a>
+                                    </li>
 
-                                <div class="row">
-                                    <div class="col-sm-5">
-                                        <div class="dataTables_info" id="example1_info" role="status" aria-live="polite">Показано
-                                            {{ users.onpage }} записей из {{ users|length }}
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-7 text-right">
-                                        <div class="dataTables_paginate paging_simple_numbers" id="example1_paginate">
-                                            {% if users.maxPages > 1 %}
-                                                <ul class="pagination pagination-sm">
-                                                    {# `«` arrow  #}
-                                                    <li {{ users.page == 1 ? 'class="disabled"' }}>
-                                                        <a href="{{ path('admin_user_list', {page: users.page-1 < 1 ? 1 : users.page-1}) }}">«</a>
-                                                    </li>
+                                    {# Render each page number #}
+                                    {% for i in 1..users.maxPages %}
+                                        <li {{ users.page == i ? 'class="active"' }}>
+                                            <a href="{{ path('admin_user_list', app.request.query|merge({page: i})) }}">{{ i }}</a>
+                                        </li>
+                                    {% endfor %}
 
-                                                    {# Render each page number #}
-                                                    {% for i in 1..users.maxPages %}
-                                                        <li {{ users.page == i ? 'class="active"' }}>
-                                                            <a href="{{ path('admin_user_list', {page: i}) }}">{{ i }}</a>
-                                                        </li>
-                                                    {% endfor %}
-
-                                                    {# `»` arrow #}
-                                                    <li {{ users.page == users.maxPages ? 'class="disabled"' }}>
-                                                        <a href="{{ path('admin_user_list', {page: users.page+1 <= users.maxPages ? users.page+1 : users.page}) }}">»</a>
-                                                    </li>
-                                                </ul>
-                                            {% endif %}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- /.tab-content -->
+                                    {# `»` arrow #}
+                                    <li {{ users.page == users.maxPages ? 'class="disabled"' }}>
+                                        <a href="{{ path('admin_user_list', app.request.query|merge({page: users.page+1 <= users.maxPages ? users.page+1 : users.page})) }}">»</a>
+                                    </li>
+                                </ul>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -94,5 +103,5 @@
 {% endblock %}
 
 {% block javascripts %}
-<script src="{{asset('jstree/dist/jstree.js')}}"></script>
+    <script src="{{ asset('jstree/dist/jstree.js') }}"></script>
 {% endblock %}

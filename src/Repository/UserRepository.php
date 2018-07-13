@@ -22,13 +22,33 @@ class UserRepository extends ServiceEntityRepository
 
     public function adminUserList($request)
     {
-        $query = $this->createQueryBuilder('u')
-            //->andWhere('u.exampleField = :val')
-            //->setParameter('val', $value)
-            ->orderBy('u.id', 'ASC')
-            ->getQuery();
+        $order_col = $request->attributes->get('order_col');
+        $order_type = $request->attributes->get('order_type') ?? 'desc';
+        $rowsPerPage = $request->query->get('rowsPerPage') ?? 25;
 
-        return PageHelper::paginate($query, $request, $limit = 2);
+        switch ($order_col) {
+            case 'id': case 'email': case 'username':
+                $order_col = 'u.'.$order_col;
+                break;
+            default:
+                $order_col = 'u.id';
+        }
+
+        $query = $this->createQueryBuilder('u');
+
+        if ($request->get('quickSearch')) {
+            $value = trim($request->get('quickSearch'));
+            $query->where($query->expr()->orX(
+                $query->expr()->eq('u.id', ':val'),
+                $query->expr()->eq('u.email', ':val'),
+                $query->expr()->eq('u.username', ':val')
+            ));
+            $query->setParameter('val', $value);
+        }
+
+        $query->orderBy($order_col, $order_type)->getQuery();
+
+        return PageHelper::paginate($query, $request, $rowsPerPage);
     }
 
 //    /**

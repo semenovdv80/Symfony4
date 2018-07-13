@@ -4,12 +4,15 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Helper\Translater;
+use App\Traits\OrderableTrait;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
+
 class UserController extends Controller
 {
+    use OrderableTrait;
     /**
      * Admin Panel : Show list of users
      *
@@ -17,11 +20,16 @@ class UserController extends Controller
      */
     public function admin_user_list(Request $request)
     {
+        /*Breadcrumbs*/
         Translater::setLocale($request->getLocale());
         $breadcrumbs = $this->get("white_october_breadcrumbs");
         $breadcrumbs->addItem(Translater::show('Admin Panel'), $this->get("router")->generate("admin"));
         $breadcrumbs->addItem(Translater::show('List of users'), $this->get("router")->generate("admin_user_list"));
 
+        /*Set order by column*/
+        $this->OrderByColumn($request);
+        
+        /*Get list of users*/
         $userRep = $this->getDoctrine()->getRepository(User::class);
         $users = $userRep->adminUserList($request);
         
