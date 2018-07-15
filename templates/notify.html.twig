@@ -1,0 +1,11 @@
+{% if app.session.get('actionResult') %}
+    <script>
+        new Noty({
+            type: '{{ app.session.get('actionResult')['result'] }}',
+            layout: 'top',
+            theme: 'metroui',
+            text: '<div class="text-center">{{ app.session.get('actionResult')['message'] }}</div>',
+            timeout: 1000}).show()
+    </script>
+    {{ app.session.set('actionResult', null) }}
+{% endif %}

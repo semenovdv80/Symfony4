@@ -33,7 +33,7 @@
                 </li>
             </ul>
             </li>
-            <li class="treeview {{ active_menu == 'admin_users' ? "active" : '' }}">
+            <li class="treeview {{ active_menu == 'adminUsers' ? "active" : '' }}">
             <a href="#">
                 <i class="fa fa-users"></i>
                 <span>{{ 'Users'|trans }}</span>
@@ -42,8 +42,11 @@
                     </span>
             </a>
             <ul class="treeview-menu">
-                <li class="{% if app.request.attributes.get('_route') == 'admin_user_list' %}active{% endif %}">
-                    <a href="{{ path('admin_user_list') }}"><i class="fa fa-list-alt"></i>{{ 'List of users'|trans }}</a>
+                <li class="{% if app.request.attributes.get('_route') == 'adminUserList' %}active{% endif %}">
+                    <a href="{{ path('adminUserList') }}"><i class="fa fa-users"></i>{{ 'List of users'|trans }}</a>
+                </li>
+                <li class="{% if app.request.attributes.get('_route') == 'adminUserAdd' %}active{% endif %}">
+                    <a href="{{ path('adminUserAdd') }}"><i class="fa fa-user-plus"></i>{{ 'Add user'|trans }}</a>
                 </li>
             </ul>
             </li>

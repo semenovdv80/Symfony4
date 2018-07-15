@@ -10,3 +10,7 @@
     font-family: 'Glyphicons Halflings';
     content: "\e156";
 }
+
+.full-height {
+    min-height: 70vh;
+}

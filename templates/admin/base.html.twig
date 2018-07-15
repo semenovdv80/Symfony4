@@ -76,6 +76,7 @@
 
     <!-- Modals -->
     {% include '/modals/modals.html.twig' %}
+
 </div>
 <!-- ./wrapper -->
 
@@ -118,6 +119,9 @@
 <!-- main scripts -->
 <script src="{{asset('js/mainscript.js')}}"></script>
 {% block page_scripts %}{% endblock %}
+
+<!-- Notify -->
+{% include '/notify.html.twig' %}
 </body>
 </html>
 

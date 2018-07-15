@@ -48,7 +48,6 @@ class AuthController extends Controller
                 ->setTo($user->getEmail())
                 ->setBody(
                     $this->renderView(
-                    // templates/emails/registration.html.twig
                         'emails/registration.html.twig',
                         ['active_code' => $active_code]
                     ),
